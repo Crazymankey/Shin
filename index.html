@@ -700,12 +700,18 @@
   dateInput.setAttribute('min', today);
 
   // 表單送出
-  bookingForm.addEventListener('submit', (e) => {
+  bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('nameInput').value.trim();
     const phone = document.getElementById('phoneInput').value.trim();
     const date = document.getElementById('dateInput').value;
     const time = document.getElementById('timeInput').value;
+
+    await fetch('https://apeter321w.zeabur.app/webhook/c6fadf75-e01e-414a-98e9-f908d2efcf3b', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, date, time })
+    });
 
     successDetail.textContent = `${name} 您好，已為您登記 ${date} ${time} 的預約，我們將致電 ${phone} 與您確認。`;
     formView.style.display = 'none';
