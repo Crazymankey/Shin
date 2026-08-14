@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shin's Show｜美甲預約</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500;1,600&family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2B1210;
+    --wine:#5E1220;
+    --red:#AE2A2E;
+    --red-soft:#C7423F;
+    --blush:#F4DAD3;
+    --cream:#FBF1E8;
+    --cream-2:#FDF7F1;
+    --gold:#BD9A45;
+    --gold-soft:#E4CD9A;
+    --line: rgba(94,18,32,0.14);
+    --shadow: 0 18px 40px rgba(94,18,32,0.14);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:'Noto Sans TC', sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{font-family:'Noto Serif TC', serif; font-weight:700;}
+
+  .en{font-family:'Cormorant Garamond', serif;}
+
+  a{color:inherit; text-decoration:none;}
+
+  img{display:block; max-width:100%;}
+
+  /* ---------- 星芒裝飾（品牌簽名元素）---------- */
+  .spark{
+    position:absolute;
+    width:14px; height:14px;
+    pointer-events:none;
+    opacity:0;
+    animation:twinkle 3.6s ease-in-out infinite;
+  }
+  .spark svg{width:100%; height:100%; display:block;}
+  @keyframes twinkle{
+    0%, 100%{ opacity:0; transform:scale(0.4) rotate(0deg); }
+    50%{ opacity:1; transform:scale(1) rotate(25deg); }
+  }
+
+  /* ---------- Nav ---------- */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 6vw;
+    background: rgba(251,241,232,0.0);
+    transition: background .4s ease, box-shadow .4s ease, padding .4s ease;
+  }
+  .nav.scrolled{
+    background: rgba(251,241,232,0.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 24px rgba(94,18,32,0.08);
+    padding: 12px 6vw;
+  }
+  .nav .brand{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:1.5rem;
+    color:var(--cream);
+    letter-spacing:0.5px;
+    text-shadow:0 2px 10px rgba(0,0,0,0.35);
+    transition: color .4s ease, text-shadow .4s ease;
+  }
+  .nav.scrolled .brand{
+    color:var(--wine);
+    text-shadow:none;
+  }
+  .nav .brand span{color:var(--gold);}
+  .nav-cta{
+    font-size:0.85rem;
+    letter-spacing:2px;
+    color:var(--wine);
+    border:1px solid var(--wine);
+    padding:9px 20px;
+    border-radius:999px;
+    transition: all .3s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{ background:var(--wine); color:var(--cream); }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    overflow:hidden;
+    isolation:isolate;
+    background-size:cover;
+    background-position:center 30%;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+  }
+  .hero-overlay{
+    position:absolute; inset:0;
+    z-index:-1;
+    background:
+      linear-gradient(180deg, rgba(94,18,32,0.6) 0%, rgba(46,10,17,0.62) 55%, rgba(30,6,11,0.92) 100%);
+  }
+  .hero-content{
+    position:relative;
+    width:100%;
+    padding: 0 6vw 9vh;
+    color:var(--cream);
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .hero-eyebrow{
+    font-size:0.78rem;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    opacity:0;
+    animation: riseIn .9s ease forwards .15s;
+  }
+  .hero-title{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:700;
+    font-size: clamp(3.6rem, 11vw, 8rem);
+    line-height:0.95;
+    letter-spacing:1px;
+    background:linear-gradient(100deg, #fff 15%, var(--gold-soft) 45%, var(--gold) 65%, #fff 90%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 26px rgba(189,154,69,0.45));
+    opacity:0;
+    animation: riseIn 1s ease forwards .3s;
+  }
+  .hero-title small{
+    display:block;
+    font-family:'Noto Serif TC', serif;
+    font-style:normal;
+    font-weight:700;
+    font-size: clamp(1.3rem, 3vw, 1.9rem);
+    letter-spacing:6px;
+    margin-top:14px;
+    background:none;
+    -webkit-text-fill-color:var(--blush);
+    color:var(--blush);
+    filter:none;
+  }
+  .hero-sub{
+    max-width:480px;
+    font-size:1rem;
+    line-height:1.9;
+    color:rgba(251,241,232,0.86);
+    font-weight:300;
+    opacity:0;
+    animation: riseIn 1s ease forwards .5s;
+  }
+  .hero-actions{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex-wrap:wrap;
+    opacity:0;
+    animation: riseIn 1s ease forwards .7s;
+  }
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(22px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .btn-primary{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--red);
+    color:#fff;
+    font-size:0.95rem;
+    letter-spacing:3px;
+    padding:16px 34px;
+    border-radius:999px;
+    border:1px solid var(--red);
+    cursor:pointer;
+    box-shadow:0 14px 30px rgba(174,42,46,0.45);
+    transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease, background .35s ease;
+  }
+  .btn-primary:hover{
+    transform:translateY(-3px);
+    background:var(--wine);
+    border-color:var(--wine);
+    box-shadow:0 18px 36px rgba(94,18,32,0.5);
+  }
+  .btn-primary:active{ transform:translateY(-1px) scale(0.98); }
+
+  .scroll-hint{
+    display:flex; align-items:center; gap:10px;
+    font-size:0.78rem; letter-spacing:2px;
+    color:rgba(251,241,232,0.72);
+  }
+  .scroll-hint::before{
+    content:'';
+    width:26px; height:1px;
+    background:rgba(251,241,232,0.6);
+  }
+
+  /* ---------- Section shared ---------- */
+  section{ position:relative; }
+  .section-pad{ padding: 7.5rem 6vw; }
+  .section-head{
+    text-align:center;
+    max-width:640px;
+    margin:0 auto 3.6rem;
+  }
+  .section-eyebrow{
+    font-size:0.78rem;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:14px;
+    display:inline-block;
+  }
+  .section-title{
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    color:var(--wine);
+    line-height:1.35;
+  }
+  .section-desc{
+    margin-top:16px;
+    color:#6a4b45;
+    line-height:1.9;
+    font-weight:300;
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(34px);
+    transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.in-view{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* ---------- 亮點區 ---------- */
+  .highlights{
+    background: var(--cream-2);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .highlight-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:2px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:22px;
+    overflow:hidden;
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .highlight-card{
+    background:var(--cream-2);
+    padding: 3.2rem 2rem;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:18px;
+    position:relative;
+    transition: background .4s ease;
+  }
+  .highlight-card:hover{ background:var(--blush); }
+  .highlight-tag{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:0.95rem;
+    color:var(--gold);
+    letter-spacing:1px;
+  }
+  .highlight-icon{ width:34px; height:34px; color:var(--red); }
+  .highlight-card.feature{
+    background: linear-gradient(160deg, var(--wine), #7c1a26);
+    color:var(--cream);
+  }
+  .highlight-card.feature:hover{ background: linear-gradient(160deg, #6a1420, var(--wine)); }
+  .highlight-card.feature .highlight-tag{ color:var(--gold-soft); }
+  .highlight-card.feature .highlight-icon{ color:var(--gold-soft); }
+  .highlight-card h3{
+    font-size:1.5rem;
+    line-height:1.4;
+  }
+  .highlight-card p{
+    font-size:0.92rem;
+    line-height:1.85;
+    color:inherit;
+    opacity:0.82;
+    font-weight:300;
+  }
+  .highlight-badge{
+    position:absolute; top:24px; right:24px;
+    font-size:0.7rem;
+    letter-spacing:2px;
+    padding:5px 12px;
+    border-radius:999px;
+    border:1px solid var(--gold-soft);
+    color:var(--gold-soft);
+  }
+
+  /* ---------- Gallery strip ---------- */
+  .gallery{
+    padding: 6rem 6vw 7.5rem;
+    text-align:center;
+  }
+  .gallery-frame{
+    max-width:760px;
+    margin:0 auto;
+    position:relative;
+    border-radius:26px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .gallery-frame img{ width:100%; }
+  .gallery-frame::after{
+    content:'';
+    position:absolute; inset:0;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+    border-radius:26px;
+  }
+  .gallery-caption{
+    margin-top:20px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.15rem;
+    color:var(--wine);
+  }
+
+  /* ---------- CTA band ---------- */
+  .cta-band{
+    background:linear-gradient(150deg, var(--wine) 0%, #7c1a26 55%, var(--red) 100%);
+    color:var(--cream);
+    text-align:center;
+    padding:6rem 6vw;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-band h2{
+    font-size:clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom:16px;
+  }
+  .cta-band p{
+    max-width:480px;
+    margin:0 auto 2.4rem;
+    font-weight:300;
+    line-height:1.9;
+    color:rgba(251,241,232,0.85);
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    padding:3.4rem 6vw 2.4rem;
+    text-align:center;
+    color:#8a6a63;
+    font-size:0.85rem;
+    background:var(--cream);
+  }
+  footer .brand{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.3rem;
+    color:var(--wine);
+    margin-bottom:10px;
+    display:block;
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(30,6,11,0.55);
+    backdrop-filter: blur(4px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:100;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .4s ease;
+  }
+  .modal-overlay.open{ opacity:1; pointer-events:auto; }
+
+  .modal{
+    background:var(--cream-2);
+    width:100%;
+    max-width:440px;
+    border-radius:22px;
+    padding:2.6rem 2.2rem 2.2rem;
+    position:relative;
+    box-shadow:0 30px 70px rgba(30,6,11,0.4);
+    transform:translateY(28px) scale(0.97);
+    opacity:0;
+    transition: transform .45s cubic-bezier(.22,1,.36,1), opacity .4s ease;
+    max-height:90vh;
+    overflow-y:auto;
+  }
+  .modal-overlay.open .modal{
+    transform:translateY(0) scale(1);
+    opacity:1;
+  }
+  .modal-close{
+    position:absolute; top:18px; right:18px;
+    width:34px; height:34px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--wine);
+    font-size:1.1rem;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: background .3s ease, transform .3s ease;
+  }
+  .modal-close:hover{ background:var(--blush); transform:rotate(90deg); }
+
+  .modal-eyebrow{
+    font-size:0.75rem;
+    letter-spacing:4px;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .modal h3{
+    font-size:1.7rem;
+    color:var(--wine);
+    margin-bottom:6px;
+  }
+  .modal-desc{
+    font-size:0.88rem;
+    color:#8a6a63;
+    margin-bottom:1.8rem;
+    line-height:1.7;
+    font-weight:300;
+  }
+
+  .field{
+    margin-bottom:1.2rem;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .field label{
+    font-size:0.82rem;
+    letter-spacing:1px;
+    color:var(--wine);
+    font-weight:500;
+  }
+  .field input{
+    font-family:'Noto Sans TC', sans-serif;
+    font-size:0.95rem;
+    padding:13px 14px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    outline:none;
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .field input:focus{
+    border-color:var(--red);
+    box-shadow:0 0 0 3px rgba(174,42,46,0.14);
+  }
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+
+  .submit-btn{
+    width:100%;
+    margin-top:0.6rem;
+    background:var(--red);
+    color:#fff;
+    border:none;
+    padding:15px;
+    border-radius:12px;
+    font-size:0.98rem;
+    letter-spacing:2px;
+    cursor:pointer;
+    transition: background .3s ease, transform .3s ease;
+  }
+  .submit-btn:hover{ background:var(--wine); }
+  .submit-btn:active{ transform:scale(0.98); }
+
+  .success-msg{
+    display:none;
+    text-align:center;
+    padding: 1rem 0 0.4rem;
+  }
+  .success-msg.show{ display:block; animation: riseIn .5s ease forwards; }
+  .success-msg .check{
+    width:56px; height:56px;
+    border-radius:50%;
+    background:var(--blush);
+    color:var(--red);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 16px;
+    font-size:1.6rem;
+  }
+  .success-msg h4{ color:var(--wine); font-size:1.3rem; margin-bottom:8px; }
+  .success-msg p{ color:#8a6a63; font-size:0.9rem; line-height:1.8; font-weight:300; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    .highlight-grid{ grid-template-columns:1fr; border-radius:20px; }
+    .section-pad{ padding:5.5rem 6vw; }
+  }
+  @media (max-width: 860px){
+    .hero{ background-attachment:scroll; }
+  }
+  @media (max-width: 520px){
+    .hero-content{ padding-bottom:12vh; }
+    .hero-actions{ flex-direction:column; align-items:flex-start; gap:16px; }
+    .field-row{ grid-template-columns:1fr; }
+    .nav .brand{ font-size:1.25rem; }
+    .nav-cta{ padding:8px 14px; font-size:0.72rem; letter-spacing:1px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+  <div class="brand">Shin<span>'</span>s <span>Show</span></div>
+</nav>
+
+<!-- Hero -->
+<header class="hero" role="img" aria-label="法式手繪美甲，鑲嵌星芒鑽飾">
+  <div class="hero-overlay"></div>
+
+  <div class="spark" style="top:14%; left:8%; animation-delay:.2s;">✦</div>
+  <div class="spark" style="top:22%; left:82%; animation-delay:1.4s;">✦</div>
+  <div class="spark" style="top:38%; left:92%; animation-delay:2.3s;">✦</div>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">Nail Art Studio · 指尖美學工作室</span>
+    <h1 class="hero-title en">Shin's Show
+      <small>一抹紅，是指尖的態度</small>
+    </h1>
+    <p class="hero-sub">手工繪製的星芒與法式線條，鑲上每一顆細鑽。從色彩到光澤，我們為你留下一雙值得被看見的手。</p>
+    <div class="hero-actions">
+      <span class="scroll-hint">向下探索</span>
+    </div>
+  </div>
+</header>
+
+<!-- 亮點區 -->
+<section class="highlights">
+  <div class="section-pad">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">Why Shin's Show</span>
+      <h2 class="section-title">值得預約的三個理由</h2>
+      <p class="section-desc">每一次到訪，都是一次被細心對待的時間。</p>
+    </div>
+
+    <div class="highlight-grid">
+      <div class="highlight-card feature reveal">
+        <span class="highlight-badge">首選推薦</span>
+        <svg class="highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg>
+        <span class="highlight-tag en">Best Value</span>
+        <h3>CP值超高</h3>
+        <p>職人手感結合平實定價，同樣的細緻做工，不需要為了美付出過高的代價。</p>
+      </div>
+
+      <div class="highlight-card reveal">
+        <svg class="highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19l6-14 6 14M6.5 13h7M18 5v6M21 8h-6"/></svg>
+        <span class="highlight-tag en">Handcraft</span>
+        <h3>精緻手繪工藝</h3>
+        <p>每一筆線條、每一顆星芒，皆為現場手工繪製，沒有兩雙手是完全相同的。</p>
+      </div>
+
+      <div class="highlight-card reveal">
+        <svg class="highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.6"/></svg>
+        <span class="highlight-tag en">Sparkle</span>
+        <h3>閃耀鑽飾點綴</h3>
+        <p>細鑽與珠光層層鑲嵌，光線落下時，指尖成為最安靜也最亮眼的細節。</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- CTA band -->
+<section class="cta-band">
+  <div class="spark" style="top:20%; left:12%; animation-delay:.6s;">✦</div>
+  <div class="spark" style="top:60%; left:88%; animation-delay:1.9s;">✦</div>
+  <div class="reveal">
+    <h2>把時間留給自己</h2>
+    <p>填寫你希望的日期與時間，讓Shin為你準備好一切。</p>
+    <button class="btn-primary" id="bandCta">開始預約</button>
+  </div>
+</section>
+
+<footer>
+  <span class="brand en">Shin's Show</span>
+  <p>指尖美學工作室 · 採預約制，感謝您的耐心等候</p>
+  <p>© 2026 李苙僑</p>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+
+    <div id="formView">
+      <span class="modal-eyebrow">Reservation</span>
+      <h3>開始預約</h3>
+      <p class="modal-desc">請填寫以下資訊與希望的預約時間，我們將盡快與您確認。</p>
+
+      <form id="bookingForm">
+        <div class="field">
+          <label for="nameInput">姓名</label>
+          <input type="text" id="nameInput" placeholder="請輸入您的姓名" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="phoneInput">電話</label>
+            <input type="tel" id="phoneInput" placeholder="09xx-xxx-xxx" required>
+          </div>
+          <div class="field">
+            <label for="dateInput">日期</label>
+            <input type="date" id="dateInput" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="timeInput">預約時間</label>
+          <input type="text" id="timeInput" placeholder="請輸入希望的時間，例如：下午 2:00" autocomplete="off" required>
+        </div>
+        <button type="submit" class="submit-btn">確認送出</button>
+      </form>
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <div class="check">✓</div>
+      <h4>預約已送出</h4>
+      <p id="successDetail">我們已收到您的預約資訊，將盡快與您聯繫確認。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Nav 背景切換
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // 滾動淡入
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Modal 控制
+  const overlay = document.getElementById('modalOverlay');
+  const openers = [document.getElementById('bandCta')];
+  const closeBtn = document.getElementById('modalClose');
+  const formView = document.getElementById('formView');
+  const successMsg = document.getElementById('successMsg');
+  const bookingForm = document.getElementById('bookingForm');
+  const successDetail = document.getElementById('successDetail');
+
+  function openModal(e){
+    if(e) e.preventDefault();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    formView.style.display = 'block';
+    successMsg.classList.remove('show');
+    bookingForm.reset();
+  }
+  function closeModal(){
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  openers.forEach(btn => btn.addEventListener('click', openModal));
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+
+  // 最小日期為今天
+  const dateInput = document.getElementById('dateInput');
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.setAttribute('min', today);
+
+  // 表單送出
+  bookingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('nameInput').value.trim();
+    const phone = document.getElementById('phoneInput').value.trim();
+    const date = document.getElementById('dateInput').value;
+    const time = document.getElementById('timeInput').value;
+
+    successDetail.textContent = `${name} 您好，已為您登記 ${date} ${time} 的預約，我們將致電 ${phone} 與您確認。`;
+    formView.style.display = 'none';
+    successMsg.classList.add('show');
+  });
+</script>
+
+</body>
+</html>
